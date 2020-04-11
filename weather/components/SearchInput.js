@@ -21,7 +21,7 @@ export default class SearchInput extends React.Component {
         this.setState({ text: '' });
     }
 
-    static PropTypes = {
+    static propTypes = {
         onSubmit: PropTypes.func.isRequired,
         placeholder: PropTypes.string
     }
