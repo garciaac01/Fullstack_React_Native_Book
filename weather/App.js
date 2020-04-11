@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import getImageForWeather from './utils/getImageForWeather';
-import { fetchLocationId, fetchWeather } from './utils.api';
+import { fetchLocationId, fetchWeather } from './utils/api';
 
 import SearchInput from './components/SearchInput';
 
@@ -57,32 +57,57 @@ export default class App extends React.Component {
   };
 
   render() {
-    const { location } = this.state;
+    const {
+      loading,
+      error,
+      temperature,
+      weather,
+      location
+    } = this.state;
 
     return (
       <KeyboardAvoidingView
         style={styles.container}
         behavior="height"
       >
+        <StatusBar barStyle="light-content" />
         <ImageBackground
-          source={getImageForWeather('Clear')}
+          source={getImageForWeather(weather)}
           style={styles.imageContainer}
           imageStyle={styles.image}
         >
           <View style={styles.detailsContainer}>
-            <Text style={[styles.largeText, styles.textStyle]}>
-              {location}
-            </Text>
-            <Text style={[styles.smallText, styles.textStyle]}>
-              Light Cloud
-            </Text>
-            <Text style={[styles.largeText, styles.textStyle]}>
-              24°
-            </Text>
-            <SearchInput
-              placeholder="Search any city"
-              onSubmit={this.handleUpdateLocation}
+            <ActivityIndicator
+              animating={loading}
+              color="white"
+              size="large"
             />
+            {!loading && (
+              <View>
+                {error && (
+                  <Text style={[styles.smallText, styles.textStyle]}>
+                    Could not load weather, please try a different city.
+                  </Text>
+                )}
+                {!error && (
+                  <View>
+                    <Text style={[styles.largeText, styles.textStyle]}>
+                      {location}
+                    </Text>
+                    <Text style={[styles.smallText, styles.textStyle]}>
+                      {weather}
+                    </Text>
+                    <Text style={[styles.largeText, styles.textStyle]}>
+                      {`${Math.round(temperature)}°`}
+                    </Text>
+                  </View>
+                )}
+                <SearchInput
+                  placeholder="Search any city"
+                  onSubmit={this.handleUpdateLocation}
+                />
+              </View>
+            )}
           </View>
         </ImageBackground>
       </KeyboardAvoidingView>
