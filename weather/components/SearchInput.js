@@ -21,6 +21,15 @@ export default class SearchInput extends React.Component {
         this.setState({ text: '' });
     }
 
+    static PropTypes = {
+        onSubmit: PropTypes.func.isRequired,
+        placeholder: PropTypes.string
+    }
+
+    static defaultProps = {
+        placeholder: '',
+    };
+
     render() {
         const { placeholder } = this.props;
         const { text } = this.state;
@@ -42,15 +51,6 @@ export default class SearchInput extends React.Component {
         );
     }
 }
-
-SearchInput.PropTypes = {
-    onSubmit: PropTypes.func.isRequired,
-    placeholder: PropTypes.string
-}
-
-SearchInput.defaultProps = {
-    placeholder: '',
-};
 
 const styles = StyleSheet.create({
     container: {
