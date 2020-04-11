@@ -16,16 +16,13 @@ import { fetchLocationId, fetchWeather } from './utils/api';
 import SearchInput from './components/SearchInput';
 
 export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: false,
-      error: false,
-      location: '',
-      temperature: 0,
-      weather: '',
-    };
-  }
+  state = {
+    loading: false,
+    error: false,
+    location: '',
+    temperature: 0,
+    weather: '',
+  };
 
   componentDidMount() {
     // Set the initial value of location.
