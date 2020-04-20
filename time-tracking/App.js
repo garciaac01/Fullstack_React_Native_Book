@@ -34,6 +34,29 @@ export default class App extends React.Component {
     });
   };
 
+  handleFormSubmit = attrs => {
+    const { timers } = this.state;
+
+    this.setState({
+      timers: timers.map(timer => {
+        if (timer.id === attrs.id) {
+          const { title, project } = attrs;
+
+          return { ...timer, title, project };
+        } else {
+          return timer;
+        }
+      }),
+    });
+  };
+
+  handleTimerDeleted = timerId => {
+    this.setState({
+      timers: this.state.timers.filter(t => t.id !== timerId),
+    });
+  };
+
+
   render() {
     const { timers } = this.state;
 
@@ -54,6 +77,8 @@ export default class App extends React.Component {
               project={project}
               elapsed={elapsed}
               isRunning={isRunning}
+              onFormSubmit={this.handleFormSubmit}
+              onRemovePress={this.handleTimerDeleted}
             />
           )
           )}
