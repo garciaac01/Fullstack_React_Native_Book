@@ -26,6 +26,33 @@ export default class App extends React.Component {
     ],
   };
 
+  componentDidMount() {
+    const TIME_INTERVAL = 1000;
+
+    this.intervalId = setInterval(() => {
+      const { timers } = this.state;
+
+      this.setState({
+        timers: timers.map(timer => {
+          const { elapsed, isRunning } = timer;
+
+          return {
+            ...timer,
+            elapsed: isRunning ? elapsed + TIME_INTERVAL : elapsed,
+          };
+        }),
+      });
+    }, TIME_INTERVAL);
+  }
+
+  // common design in React apps that use intervals.
+  // start the interval in componentDidMount, remove
+  // the interval in componentWillUnmount to keep it from
+  // continuing to run and use resources
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
+
   handleCreateFormSubmit = timer => {
     const { timers } = this.state;
 
@@ -56,9 +83,33 @@ export default class App extends React.Component {
     });
   };
 
+  toggleTimer = timerId => {
+    // any time setting the state depends
+    // on the previous state, you can use a function
+    // in set state instead of just passing in an objectbundleRenderer.
+    // the function sends the previous state as an argument that
+    // is guaranteed to be up to date.
+    this.setState(prevState => {
+      const { timers } = prevState;
+
+      return {
+        timers: timers.map(timer => {
+          const { id, isRunning } = timer;
+
+          if (id === timerId) {
+            return { ...timer, isRunning: !isRunning };
+          } else {
+            return timer;
+          }
+        }),
+      };
+    });
+  };
+
 
   render() {
     const { timers } = this.state;
+    console.log(timers);
 
     return (
       <View style={styles.appContainer}>
@@ -79,6 +130,8 @@ export default class App extends React.Component {
               isRunning={isRunning}
               onFormSubmit={this.handleFormSubmit}
               onRemovePress={this.handleTimerDeleted}
+              onStartPress={this.toggleTimer}
+              onStopPress={this.toggleTimer}
             />
           )
           )}
